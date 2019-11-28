@@ -1,6 +1,12 @@
 maps/
 .DS_Store
 .idea/
+mapdata/*/*.npz
+
+node_modules/
+package-lock.json
+*.wav
+temp_json_file.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

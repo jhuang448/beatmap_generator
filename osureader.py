@@ -24,7 +24,7 @@ def read_osu_file(path, convert=False, wav_name="wavfile.wav", json_name="temp_j
 
         if convert:
             mp3_file = os.path.join(file_dir, map_dict["general"]["AudioFilename"]);
-            subprocess.call([GLOBAL_VARS["ffmpeg_path"], "-y", "-i", mp3_file, wav_name]);
+            subprocess.call([GLOBAL_VARS["ffmpeg_path"], "-v", "0", "-y", "-i", mp3_file, wav_name]);
 
     # delete the temp json here!!!
     if json_name == "temp_json_file.json":

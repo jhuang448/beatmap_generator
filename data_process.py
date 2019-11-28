@@ -1,5 +1,36 @@
 import os
 import numpy as np
+import re, time
+from osureader import test_process_path, read_and_save_osu_file
+
+map_path = "maps/"
+mapdata_path = "mapdata/"
+level = 'Hard'
+divisor=4
+
+def save_map_data(maplist_dir, level):
+    maplist_name = os.path.join(maplist_dir, "maplist_{}.txt".format(level))
+    with open(maplist_name) as fp:
+        fcont = fp.readlines()
+
+    results = [];
+    for line in fcont:
+        results.append(line)
+
+    print("Number of {} beatmaps: {}".format(level, len(results)))
+
+    data_path = os.path.join(mapdata_path, level)
+    if os.path.exists(data_path) == False:
+        os.mkdir(data_path)
+
+    for k, mname in enumerate(results):
+        try:
+            start = time.time()
+            read_and_save_osu_file(mname.strip(), filename=os.path.join(data_path, str(k)), divisor=divisor);
+            end = time.time()
+            print("Map data #" + str(k) + " saved! time = " + str(end - start) + " secs");
+        except Exception as e:
+            print("Error on #{}, path = {}, error = {}".format(str(k), mname.strip(), e));
 
 def write_maplist(map_dir, level, maplist_dir, unzip=False):
 
@@ -43,9 +74,15 @@ def write_maplist(map_dir, level, maplist_dir, unzip=False):
                     line = os.path.join(map_dir, folder, file) + '\n'
                     print(line)
                     F.write(line)
-                    break # prevent multiple normals for each song
+                    break # one (if any) beatmap per song
 
     return
 
 if __name__ == "__main__":
-    write_maplist(map_dir='./maps/', level='Easy', maplist_dir='./mapdata/', unzip=False)
+    # create maplist
+    #write_maplist(map_dir=map_path, level=level, maplist_dir=mapdata_path, unzip=False)
+    # test node
+    test_process_path("node")
+    # save map data
+    save_map_data(maplist_dir=mapdata_path, level=level)
+    print("Done!")
