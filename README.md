@@ -1,8 +1,10 @@
 # Beatmap Generator for osu!
 
-reference: https://github.com/kotritrona/osumapper
+Reference Repo: https://github.com/kotritrona/osumapper
 
-data: https://pan.baidu.com/s/1xqTLtfbMd7DMc1sWZxGCBw
+Data: https://pan.baidu.com/s/1xqTLtfbMd7DMc1sWZxGCBw
+
+.osu Format: https://osu.ppy.sh/help/wiki/osu!_File_Formats/Osu_(file_format)
 
 Currently only using: Standard -> Beatmap Pack -> 800-899
 
@@ -10,6 +12,10 @@ Currently only using: Standard -> Beatmap Pack -> 800-899
 - "lst" (transformed data): table of [TICK, TIME, NOTE, IS_CIRCLE, IS_SLIDER, IS_SPINNER, IS_SLIDER_END, IS_SPINNER_END, SLIDING, SPINNING, MOMENTUM, ANGULAR_MOMENTUM, EX1, EX2, EX3], length MAPTICKS
 - "wav" (wav data): np.array, shape of [len(snapsize), MAPTICKS, 2, fft_size//4]
 - "flow" (flow data): table of [TICK, TIME, TYPE, X, Y, IN_DX, IN_DY, OUT_DX, OUT_DY] notes only
+
+### About MOMENTUM & ANGULAR_MOMENTUM
+Two new variables defined by that author to capture the information about the moving speed of the mouse.
+Probably they are not necessary.
 
 ## DONE:
 1. Beatmap resources
@@ -26,9 +32,8 @@ Sorry for bringing up such a big project...Let's see where we can get.
 3. extract other features: (Percussive Feature + Harmonic Feature) or Mel
 
 ### Network Architecture (generate the 'transformed' data)
-1. figure out what momentum means in the context of beatmap
-2. CRNN
-3. one network or two (classification + regression) ?
+1. CRNN
+2. one network or two (classification + regression) ?
 
 ### GAN (generate the 'flow' data)
 If too complicated, we can skip this part.

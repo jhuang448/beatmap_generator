@@ -2,11 +2,8 @@ import os
 import numpy as np
 import re, time
 from osureader import test_process_path, read_and_save_osu_file
-
-map_path = "maps/"
-mapdata_path = "mapdata/"
-level = 'Hard'
-divisor=4
+from lib import read_some_npzs_and_preprocess, read_npz_list, train_test_split
+from config import *
 
 def save_map_data(maplist_dir, level):
     maplist_name = os.path.join(maplist_dir, "maplist_{}.txt".format(level))
@@ -78,11 +75,22 @@ def write_maplist(map_dir, level, maplist_dir, unzip=False):
 
     return
 
+def data_split_save(filename):
+    train_file_list = read_npz_list()
+    train_data2, div_data2, train_labels2 = read_some_npzs_and_preprocess(train_file_list)
+    (new_train_data, new_div_data, new_train_labels), (test_data, test_div_data, test_labels) = train_test_split(
+        train_data2, div_data2, train_labels2)
+
+    np.savez_compressed(filename + 'train.npz', spec=new_train_data, div=new_div_data, label=new_train_labels)
+    np.savez_compressed(filename + 'test.npz', spec=test_data, div=test_div_data, label=test_labels)
+
 if __name__ == "__main__":
     # create maplist
-    #write_maplist(map_dir=map_path, level=level, maplist_dir=mapdata_path, unzip=False)
+    # write_maplist(map_dir=map_path, level=level, maplist_dir=mapdata_path, unzip=False)
     # test node
-    test_process_path("node")
+    # test_process_path("node")
     # save map data
-    save_map_data(maplist_dir=mapdata_path, level=level)
+    # save_map_data(maplist_dir=mapdata_path, level=level)
+    # split training / testing and save
+    data_split_save(data_path) # change level in lib.py
     print("Done!")
