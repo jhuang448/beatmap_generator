@@ -55,7 +55,6 @@ def read_one_osu_test(osuFile):
     return (test_data2, div_data2)
 
 
-
 def predict_CRNNs(osuFile, model_1, model_2):
 
     # read .osu
@@ -78,6 +77,7 @@ def predict_CRNNs(osuFile, model_1, model_2):
     print(len(te_loader))
 
     model1.eval()
+    model2.eval()
     pred1 = []
     pred2 = []
 
@@ -93,8 +93,7 @@ def predict_CRNNs(osuFile, model_1, model_2):
         pred2.extend(outputs2.data.cpu().numpy())
 
     #print(pred2)
-    return pred1, pred2
-
+    return np.array(pred1), np.array(pred2), test_data[1]
 
 if __name__ == "__main__":
     osuFile = "maps/317749 EYE_XY feat. Yoneko - Knight of Firmament/EYE_XY feat. Yoneko - Knight of Firmament (Pho) [Normal].osu"

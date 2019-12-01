@@ -122,7 +122,7 @@ def read_some_npzs_and_preprocess_m(npz_list):
     return train_data2, div_data2, train_labels2;
 
 
-def train_test_split_m(train_data2, div_data2, train_labels2, test_split_count=233):
+def train_test_split_m(train_data2, div_data2, train_labels2, test_split_count=23):
     new_train_data = train_data2[:-test_split_count];
     new_div_data = div_data2[:-test_split_count];
     new_train_labels = train_labels2[:-test_split_count];

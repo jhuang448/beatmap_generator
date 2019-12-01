@@ -5,6 +5,8 @@ mapdata/*/*.npz
 *.npy
 *.npz
 mapthis.json
+evaluatedRhythm.json
+*.osu
 
 node_modules/
 package-lock.json

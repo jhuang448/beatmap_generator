@@ -8,7 +8,7 @@ from config import *
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 def main():
-    model_name = '{}_batch{}_lr{}'.format(model_choose, batch_size, lr)
+    model_name = '{}_{}_batch{}_lr{}'.format(model_choose, level, batch_size, lr)
 
     # model saving path
     from datetime import date
@@ -29,7 +29,7 @@ def main():
     print(len(tr_loader), len(va_loader))
 
     # build model (function inside model.py)
-    if model_choose == 'ConvLstmNet':
+    if model_choose == 'ConvLstm':
         model = ConvLstmNet()
     else:
         model = ConvLstmNet2()

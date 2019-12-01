@@ -9,7 +9,7 @@ class Trainer:
     def __init__(self, model, lr, epoch, save_fn):
         self.epoch = epoch
         self.model = model
-        #self.lr = lr
+        self.lr = lr
         self.save_fn = save_fn
         self.criterion = nn.MSELoss()
 
@@ -31,13 +31,13 @@ class Trainer:
         best_loss = 1000000000
 
         # optimizer #adam, outside loop, default lr
-        opt = optim.Adam(self.model.parameters())  # 1e-5
+        opt = optim.Adam(self.model.parameters(), lr=self.lr)  # 1e-5
         scheduler = torch.optim.lr_scheduler.ExponentialLR(opt, 0.5, last_epoch=-1)
 
         for e in range(1, self.epoch + 1):
             loss_total = 0
             self.model.train()
-            if e % 10 == 0:
+            if e % 5 == 0:
                 scheduler.step()
             print('\n==> Training Epoch #%d' % (e))
             for param_group in opt.param_groups:
@@ -75,8 +75,8 @@ class Trainer:
                 loss_val += self.criterion(outputs, labels).item()
 
             loss_val = loss_val / len(va_loader)
-            print(spec, labels)
-            print(outputs)
+            #print(spec, labels)
+            #print(outputs)
             #v = input('val...')
 
             # print model result
@@ -98,7 +98,7 @@ class Trainer:
                 best_loss = loss_val
 
             # early stopping
-            if (e - best_epoch) > 20:
+            if (e - best_epoch) > 10:
                 print(e, best_epoch)
                 print('early stopping')
                 break
