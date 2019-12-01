@@ -22,8 +22,9 @@ Probably they are not necessary.
 2. Create maplist: maplist_Normal.txt, maplist_Hard.txt, maplist_Easy.txt
 3. use osureader.py to parse the beatmap
 4. save data to .npz files (one for each): transformed_data, wav_data, flow_data
-5. CRNN, overfitting very fast...
+5. CRNN, (model1 and model2)
 ![alt text](ConvLstm_loss.png)
+6. GAN
 
 ## TODO:
 
@@ -31,19 +32,17 @@ Sorry for bringing up such a big project...Let's see where we can get.
 
 ### Data Preparation
 1. think more about the input and output
-2. add more data... (may run into memory issues...) [Not urgent]
-3. extract other features: (Percussive Feature + Harmonic Feature) or Mel
 
 ### Network Architecture (generate the 'transformed' data)
-1. one network or two (classification + regression) ?
+1. model1: almost no circles; deal with unbalanced training data
+2. replace div data with something built with madmom downbeat tracking...
 
 ### GAN (generate the 'flow' data)
-If too complicated, we can skip this part.
-1. understand the GAN code in the reference repo...
+1. write into python script
+2. replace with my model (See predict_CRNN.py and notebook 6)
 
 ### Evaluation Metrics
-1. might want to look into metrics for: beat-tracking, transcription, music generation(?)
-2. listening test...if possible (probably not)
+1. F-score (That's why we need to deal with the unbalanced issue)
 
 ## Deliverables
 - Report
