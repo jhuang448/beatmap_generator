@@ -1,5 +1,5 @@
 import os, torch
-from model import ConvLstmNet
+from model import ConvLstmNet, ConvLstmNet2
 from train_utils import Trainer
 from lib import Data2Torch, load_data
 from config import *
@@ -29,7 +29,10 @@ def main():
     print(len(tr_loader), len(va_loader))
 
     # build model (function inside model.py)
-    model = ConvLstmNet()
+    if model_choose == 'ConvLstmNet':
+        model = ConvLstmNet()
+    else:
+        model = ConvLstmNet2()
     model.to(device)
 
     # start training (function inside train_utils.py)

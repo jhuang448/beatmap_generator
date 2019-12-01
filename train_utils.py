@@ -58,6 +58,10 @@ class Trainer:
                 loss_train += loss.item()
             loss_train = loss_train / len(tr_loader)
 
+            #print(spec, labels)
+            #print(outputs)
+            #v = input('train...')
+
             # Validate
             loss_val = 0
             for batch_idx, _input in enumerate(va_loader):
@@ -71,6 +75,9 @@ class Trainer:
                 loss_val += self.criterion(outputs, labels).item()
 
             loss_val = loss_val / len(va_loader)
+            print(spec, labels)
+            print(outputs)
+            #v = input('val...')
 
             # print model result
             sys.stdout.write('\r')
