@@ -178,17 +178,6 @@ def read_maps():
     result = np.array(result)[:, :, [2, 3, 6, 7, 8, 9]]
     return result
 
-# The default dataset so people don't have to come up with a whole dataset to use this.
-# To save the flow data to a flow_dataset.npz, it is simple - just run the following after reading maps:
-# np.savez_compressed("flow_dataset", maps = maps)
-# try:
-#     maps = read_maps()
-#     labels = np.ones(maps.shape[0])
-# except:
-#     with np.load("flow_dataset.npz") as flow_dataset:
-#         maps = flow_dataset["maps"]
-#         labels = np.ones(maps.shape[0])
-
 with np.load(flow_fn) as flow_dataset:
         maps = flow_dataset["maps"]
         labels = np.ones(maps.shape[0])
