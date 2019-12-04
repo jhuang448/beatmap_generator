@@ -582,8 +582,7 @@ def reset_model_weights(models):
 # we can train all the classifiers first, onto Epoch X [x = 1~10]
 # then train the generators to fit to them
 # to reduce some training time.
-# but i think it doesn't work too well since it's the generator which is slow...
-
+# but i think it doesn't work too well since it's the generator which is slow...d
 def generate_set(models, begin = 0, start_pos=[256, 192], group_id=-1, length_multiplier=1, plot_map=True):
     extvar["begin"] = begin
     extvar["start_pos"] = start_pos
@@ -608,7 +607,8 @@ def generate_set(models, begin = 0, start_pos=[256, 192], group_id=-1, length_mu
 #     gmodel.summary()
 #     classifier_model.summary()
 #     mmodel.summary()
-
+    g_losses = []
+    c_losses = []
     for i in range(max_epoch):
         
         gnoise = np.random.random((g_batch, g_input_size))
@@ -640,7 +640,8 @@ def generate_set(models, begin = 0, start_pos=[256, 192], group_id=-1, length_mu
         g_loss = np.mean(history.history['loss'])
         c_loss = np.mean(history2.history['loss'])
         print("Group {}, Epoch {}: G loss: {} vs. C loss: {}".format(group_id, 1+i, g_loss, c_loss))
-        
+        g_losses.append(g_loss)
+        c_losses.append(c_loss)
         # delete the history to free memory
         del history, history2
         
@@ -665,8 +666,10 @@ def generate_set(models, begin = 0, start_pos=[256, 192], group_id=-1, length_mu
 #                 print(tf.reduce_mean(construct_map_with_sliders(tf.convert_to_tensor(_resgenerated, dtype="float32"), extvar=mapping_layer.extvar)))
                 break
 
-#     plot_history(history)
-#     plot_history(history2)
+    # plot_history(history)
+    # plot_history(history2)
+
+
     if plot_map:
         for i in range(3): # from our testing, any random input generates nearly the same map
             plot_noise = np.random.random((1, g_input_size))
@@ -676,7 +679,7 @@ def generate_set(models, begin = 0, start_pos=[256, 192], group_id=-1, length_mu
     
 
     
-    return res_map.squeeze()
+    return res_map.squeeze(), g_losses, c_losses
 
 # generate the map (main function)
 # dist_multiplier in #6 is used here
@@ -685,13 +688,25 @@ def generate_map():
     note_group_size = GAN_PARAMS["note_group_size"]
     pos = [np.random.randint(100, 412), np.random.randint(80, 304)]
     models = make_models()
-    
+    g_l = []
+    c_l = []
     print("# of groups: {}".format(timestamps.shape[0] // note_group_size))
     for i in range(timestamps.shape[0] // note_group_size):
-        z = generate_set(models, begin = i * note_group_size, start_pos = pos, length_multiplier = dist_multiplier, group_id = i, plot_map=False) * np.array([512, 384, 1, 1, 512, 384])
+        z, g_losses, c_losses = generate_set(models, begin = i * note_group_size, start_pos = pos, length_multiplier = dist_multiplier, group_id = i, plot_map=False) 
+        z *= np.array([512, 384, 1, 1, 512, 384])
+        # g_l += g_losses
+        # c_l += c_losses
         pos = z[-1, 0:2]
         o.append(z)
     a = np.concatenate(o, axis=0)
+    plt.plot(g_losses, "b")
+    plt.plot(c_losses, "y")
+    plt.title('Model loss')
+    plt.ylabel('Loss')
+    plt.xlabel('Epoch')
+    plt.legend(['Generator', 'Discriminator'], loc='upper left')
+    plt.show()
+    plt.savefig("GAN_losses.png")
     return a
 
 # generate a test map (debugging function)
