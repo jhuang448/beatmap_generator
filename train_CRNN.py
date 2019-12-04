@@ -4,7 +4,6 @@ from train_utils import Trainer
 from lib import Data2Torch, load_data
 from config import *
 
-# os.environ['CUDA_VISIBLE_DEVICES'] = '1'  # change
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 def main():
