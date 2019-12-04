@@ -12,10 +12,14 @@ Currently only using: Standard -> Beatmap Pack -> 800-899
 ## How to use:
 
 To train the GAN model, simply run the follow scripts:
-python GAN1.py rhythm_data.npz flow_dataset.npz
+```
+$ python GAN1.py rhythm_data.npz flow_dataset.npz
+```
 or 
-python GAN.py rhythm_data.npz flow_dataset.npz
-where GAN1.py contains the modified GAN architecture and training setup and GAN.py contains the original setup from reference repo
+```
+$ python GAN.py rhythm_data.npz flow_dataset.npz
+```
+where GAN1.py contains the modified GAN architecture and training setup and GAN.py contains the original setup from reference repo.
 
 ## Data structure                       
 - "lst" (transformed data): table of [TICK, TIME, NOTE, IS_CIRCLE, IS_SLIDER, IS_SPINNER, IS_SLIDER_END, IS_SPINNER_END, SLIDING, SPINNING, MOMENTUM, ANGULAR_MOMENTUM, EX1, EX2, EX3], length MAPTICKS
