@@ -6,6 +6,8 @@ Data: https://pan.baidu.com/s/1xqTLtfbMd7DMc1sWZxGCBw
 
 .osu Format: https://osu.ppy.sh/help/wiki/osu!_File_Formats/Osu_(file_format)
 
+Video for Generated Beatmap: https://drive.google.com/file/d/1N71juERfY-CZtFXWFYUWlTLsuG3EGOxQ/view?usp=sharing
+
 Currently only using: Standard -> Beatmap Pack -> 800-899
 
 ## Data structure                       
