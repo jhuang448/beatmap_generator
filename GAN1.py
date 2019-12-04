@@ -699,6 +699,8 @@ def generate_map():
         pos = z[-1, 0:2]
         o.append(z)
     a = np.concatenate(o, axis=0)
+
+    # Print last plot
     plt.plot(g_losses, "b")
     plt.plot(c_losses, "y")
     plt.title('Model loss')
