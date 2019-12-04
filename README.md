@@ -10,6 +10,7 @@ Video for Generated Beatmap: https://drive.google.com/file/d/1N71juERfY-CZtFXWFY
 
 Currently only using: Standard -> Beatmap Pack -> 800-899
 ## How to use:
+To read osu file, evaluate its rhythm, train a GAN model and get generated output, simply run the ``scipt.sh``(Linux or MacOS) or ``script.bat``(Windows). Remember to modify the path to the corresponding file in the script before running.
 
 To train the GAN model, simply run the follow scripts:
 ```
