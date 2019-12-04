@@ -27,7 +27,7 @@ train_glob_std = [0.19857471, 0.01427526]
 
 # predict
 dist_multiplier = 1
-note_density = {"Easy": 0.3, "Normal": 0.3, "Hard": 0.4}
+note_density = {"Easy": 0.2, "Normal": 0.3, "Hard": 0.4}
 slider_favor = 0
 divisor_favor = [0] * divisor
 
