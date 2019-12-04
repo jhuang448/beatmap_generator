@@ -6,7 +6,7 @@ MODEL2 = [Model 2]
 RHYTHM = rhythm_data.npz
 FLOW = flow_dataset.npz
 
-
+npm i polynomial
 python map_reader.py $OSU $FFMPEG
 read -n 1 -s -r -p "Press any key to continue"
 

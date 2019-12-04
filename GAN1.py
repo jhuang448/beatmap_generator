@@ -18,8 +18,8 @@ GAN_PARAMS = {
     "good_epoch" : 6,
     "max_epoch" : 25,
     "note_group_size" : 10,
-    "g_epochs" : 7,
-    "c_epochs" : 3,
+    "g_epochs" : 3,
+    "c_epochs" : 7,
     "g_batch" : 50,
     "g_input_size" : 50,
     "c_true_batch" : 50,
@@ -177,17 +177,6 @@ def read_maps():
     # only use X,Y,OUT_DX,OUT_DY,END_X,END_Y
     result = np.array(result)[:, :, [2, 3, 6, 7, 8, 9]]
     return result
-
-# The default dataset so people don't have to come up with a whole dataset to use this.
-# To save the flow data to a flow_dataset.npz, it is simple - just run the following after reading maps:
-# np.savez_compressed("flow_dataset", maps = maps)
-# try:
-#     maps = read_maps()
-#     labels = np.ones(maps.shape[0])
-# except:
-#     with np.load("flow_dataset.npz") as flow_dataset:
-#         maps = flow_dataset["maps"]
-#         labels = np.ones(maps.shape[0])
 
 with np.load(flow_fn) as flow_dataset:
         maps = flow_dataset["maps"]
@@ -593,8 +582,7 @@ def reset_model_weights(models):
 # we can train all the classifiers first, onto Epoch X [x = 1~10]
 # then train the generators to fit to them
 # to reduce some training time.
-# but i think it doesn't work too well since it's the generator which is slow...
-
+# but i think it doesn't work too well since it's the generator which is slow...d
 def generate_set(models, begin = 0, start_pos=[256, 192], group_id=-1, length_multiplier=1, plot_map=True):
     extvar["begin"] = begin
     extvar["start_pos"] = start_pos
@@ -619,7 +607,8 @@ def generate_set(models, begin = 0, start_pos=[256, 192], group_id=-1, length_mu
 #     gmodel.summary()
 #     classifier_model.summary()
 #     mmodel.summary()
-
+    g_losses = []
+    c_losses = []
     for i in range(max_epoch):
         
         gnoise = np.random.random((g_batch, g_input_size))
@@ -651,7 +640,8 @@ def generate_set(models, begin = 0, start_pos=[256, 192], group_id=-1, length_mu
         g_loss = np.mean(history.history['loss'])
         c_loss = np.mean(history2.history['loss'])
         print("Group {}, Epoch {}: G loss: {} vs. C loss: {}".format(group_id, 1+i, g_loss, c_loss))
-        
+        g_losses.append(g_loss)
+        c_losses.append(c_loss)
         # delete the history to free memory
         del history, history2
         
@@ -676,8 +666,10 @@ def generate_set(models, begin = 0, start_pos=[256, 192], group_id=-1, length_mu
 #                 print(tf.reduce_mean(construct_map_with_sliders(tf.convert_to_tensor(_resgenerated, dtype="float32"), extvar=mapping_layer.extvar)))
                 break
 
-#     plot_history(history)
-#     plot_history(history2)
+    # plot_history(history)
+    # plot_history(history2)
+
+
     if plot_map:
         for i in range(3): # from our testing, any random input generates nearly the same map
             plot_noise = np.random.random((1, g_input_size))
@@ -687,7 +679,7 @@ def generate_set(models, begin = 0, start_pos=[256, 192], group_id=-1, length_mu
     
 
     
-    return res_map.squeeze()
+    return res_map.squeeze(), g_losses, c_losses
 
 # generate the map (main function)
 # dist_multiplier in #6 is used here
@@ -696,13 +688,27 @@ def generate_map():
     note_group_size = GAN_PARAMS["note_group_size"]
     pos = [np.random.randint(100, 412), np.random.randint(80, 304)]
     models = make_models()
-    
+    g_l = []
+    c_l = []
     print("# of groups: {}".format(timestamps.shape[0] // note_group_size))
     for i in range(timestamps.shape[0] // note_group_size):
-        z = generate_set(models, begin = i * note_group_size, start_pos = pos, length_multiplier = dist_multiplier, group_id = i, plot_map=False) * np.array([512, 384, 1, 1, 512, 384])
+        z, g_losses, c_losses = generate_set(models, begin = i * note_group_size, start_pos = pos, length_multiplier = dist_multiplier, group_id = i, plot_map=False) 
+        z *= np.array([512, 384, 1, 1, 512, 384])
+        # g_l += g_losses
+        # c_l += c_losses
         pos = z[-1, 0:2]
         o.append(z)
     a = np.concatenate(o, axis=0)
+
+    # Print last plot
+    plt.plot(g_losses, "b")
+    plt.plot(c_losses, "y")
+    plt.title('Model loss')
+    plt.ylabel('Loss')
+    plt.xlabel('Epoch')
+    plt.legend(['Generator', 'Discriminator'], loc='upper left')
+    plt.show()
+    plt.savefig("GAN_losses.png")
     return a
 
 # generate a test map (debugging function)
